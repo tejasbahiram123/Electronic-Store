@@ -1,6 +1,7 @@
 package com.lcwd.electronicstore.controller;
 
 import com.lcwd.electronicstore.constant.ApiResponceMessage;
+import com.lcwd.electronicstore.constant.AppConstants;
 import com.lcwd.electronicstore.dto.UserDto;
 import com.lcwd.electronicstore.service.UserService;
 
@@ -58,7 +59,7 @@ public class UserController {
     public ResponseEntity<ApiResponceMessage> deleteUser(@PathVariable String userId) {
         logger.info("start request for delete user"+userId);
         userService.deleteUser(userId);
-        ApiResponceMessage message = ApiResponceMessage.builder().message("User Deleted Succesfull").success(true).status(HttpStatus.OK).build();
+        ApiResponceMessage message = ApiResponceMessage.builder().message(AppConstants.DELETED).success(true).status(HttpStatus.OK).build();
        logger.info("request completed for delete user"+userId);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
