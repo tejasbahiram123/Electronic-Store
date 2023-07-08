@@ -3,6 +3,7 @@ package com.lcwd.electronicstore.service.impl;
 import com.lcwd.electronicstore.constant.AppConstants;
 import com.lcwd.electronicstore.dto.UserDto;
 import com.lcwd.electronicstore.entity.User;
+import com.lcwd.electronicstore.exception.ResourceNotFoundException;
 import com.lcwd.electronicstore.repository.UserRepository;
 import com.lcwd.electronicstore.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(UserDto userDto, String userId) {
         logger.info("Initiating logic for update user"+userId);
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(AppConstants.NOT_FOUND));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.NOT_FOUND));
         user.setName(userDto.getName());
         user.setPassword(userDto.getPassword());
         user.setGender(userDto.getGender());
@@ -62,7 +63,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(String userId) {
         logger.info("Initiating logic for delete user"+userId);
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         logger.info("Initiating logic for delete user"+userId);
         userRepository.delete(user);
 
@@ -80,7 +81,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserById(String userId) {
         logger.info("Initiating logic for getUserById "+userId);
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(AppConstants.NOT_FOUND));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.NOT_FOUND));
         logger.info("complete logic for getUserById "+userId);
         return entityToDto(user);
     }
@@ -88,7 +89,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserByEmail(String email) {
         logger.info("Initiating logic for  getuserByEmail"+email);
-        User userByEmail = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException(AppConstants.NOT_FOUND));
+        User userByEmail = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(AppConstants.NOT_FOUND));
         logger.info("complete  logic for  getuserByEmail"+email);
         return entityToDto(userByEmail);
     }
