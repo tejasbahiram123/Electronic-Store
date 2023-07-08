@@ -1,7 +1,7 @@
 package com.lcwd.electronicstore.controller;
 
-import com.lcwd.electronicstore.constant.ApiResponceMessage;
 import com.lcwd.electronicstore.constant.AppConstants;
+import com.lcwd.electronicstore.dto.ApiResponceMessage;
 import com.lcwd.electronicstore.dto.UserDto;
 import com.lcwd.electronicstore.service.UserService;
 
@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -28,7 +29,7 @@ public class UserController {
      * @apiNote Create user
      */
     @PostMapping
-    public ResponseEntity<UserDto> CreateUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> CreateUser(@Valid @RequestBody UserDto userDto) {
         logger.info("start request for save the user data");
         UserDto userCreate = userService.createUser(userDto);
         logger.info("complete request for save user data");
@@ -42,7 +43,7 @@ public class UserController {
      * @apiNote update user
      */
     @PutMapping("/{userId}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable String userId
+    public ResponseEntity<UserDto> updateUser(@Valid @PathVariable String userId
             , @RequestBody UserDto userDto) {
         logger.info("start request for update user"+userId);
         UserDto updateUser = userService.updateUser(userDto, userId);

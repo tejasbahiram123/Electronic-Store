@@ -1,4 +1,4 @@
-package com.lcwd.electronicstore.constant;
+package com.lcwd.electronicstore.dto;
 
 import lombok.*;
 import org.springframework.http.HttpStatus;
