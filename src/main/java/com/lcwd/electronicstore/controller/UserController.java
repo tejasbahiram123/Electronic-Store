@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * @author Tejas Bahiram[2512]
+ * UserController for Handling the api
+ */
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -25,8 +29,8 @@ public class UserController {
 
     /**
      * @param userDto
-     * @return
-     * @apiNote Create user
+     * @return Created user
+     * @apiNote This method for Create user
      */
     @PostMapping
     public ResponseEntity<UserDto> CreateUser(@Valid @RequestBody UserDto userDto) {
@@ -39,8 +43,8 @@ public class UserController {
     /**
      * @param userId
      * @param userDto
-     * @return
-     * @apiNote update user
+     * @return updated user
+     * @apiNote This method for update user
      */
     @PutMapping("/{userId}")
     public ResponseEntity<UserDto> updateUser(@Valid @PathVariable String userId
@@ -53,8 +57,8 @@ public class UserController {
 
     /**
      * @param userId
-     * @return
-     * @apiNote delete user
+     * @return message
+     * @apiNote This method for delete user
      */
     @DeleteMapping("/{userId}")
     public ResponseEntity<ApiResponceMessage> deleteUser(@PathVariable String userId) {
@@ -66,8 +70,8 @@ public class UserController {
     }
 
     /**
-     * @return
-     * @apiNote getAlluser
+     * @return  List of User
+     * @apiNote This method for getAll user
      */
     @GetMapping
     public ResponseEntity<List<UserDto>> getAllUser() {
@@ -81,8 +85,8 @@ public class UserController {
 
     /**
      * @param userId
-     * @return
-     * @apiNote getSingle
+     * @return user by given userId
+     * @apiNote This method for getSingle user by userId
      */
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUserById(@PathVariable String userId) {
@@ -95,8 +99,8 @@ public class UserController {
 
     /**
      * @param email
-     * @return
-     * @apiNote getuser by email
+     * @return user for given email
+     * @apiNote This method for get user by given email
      */
     @GetMapping("/email/{email}")
     public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email) {
@@ -107,8 +111,8 @@ public class UserController {
     }
     /**
      * @param keyword
-     * @return
-     * @apiNote search user
+     * @return user
+     * @apiNote This method for search user
      */
     @GetMapping("/search/{keyword}")
     public ResponseEntity<List<UserDto>> searchUser(@PathVariable String keyword) {

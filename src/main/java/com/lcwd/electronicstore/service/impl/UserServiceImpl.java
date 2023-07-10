@@ -15,7 +15,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
+/**
+ * @author Tejas Bahiram[2512]
+ * UserService implementation for api
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -34,11 +37,9 @@ public class UserServiceImpl implements UserService {
         //generate unique id in string format
         String userId = UUID.randomUUID().toString();
         userDto.setUserId(userId);
-        //dto to entity
-        User user = dtoToEntity(userDto);
+        User user = this.mapper.map(userDto, User.class);
         User saveUser = userRepository.save(user);
-         //entity to dto
-        UserDto newDto = entityToDto(saveUser);
+        UserDto newDto = this.mapper.map(saveUser, UserDto.class);
         logger.info("complete logic for create user"+userId);
         return newDto;
     }
@@ -54,28 +55,26 @@ public class UserServiceImpl implements UserService {
         user.setImageName(userDto.getImageName());
 
         User updatedUser = userRepository.save(user);
-        UserDto updatedDto = entityToDto(updatedUser);
+        UserDto updatedUserDto = this.mapper.map(user, UserDto.class);
         logger.info("complete logic for update user"+userId);
-        return updatedDto;
+        return updatedUserDto;
     }
-
-
+    
     @Override
     public void deleteUser(String userId) {
         logger.info("Initiating logic for delete user"+userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         logger.info("Initiating logic for delete user"+userId);
         userRepository.delete(user);
-
     }
 
     @Override
     public List<UserDto> getAllUser() {
         logger.info("Initiating logic for getAllUser ");
         List<User> userList = userRepository.findAll();
-        List<UserDto> dtoList = userList.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
+        List<UserDto> list_Of_User_Dtos = userList.stream().map((user) -> mapper.map(user, UserDto.class)).collect(Collectors.toList());
         logger.info("complete logic for getAllUser");
-        return dtoList;
+        return list_Of_User_Dtos;
     }
 
     @Override
@@ -83,7 +82,7 @@ public class UserServiceImpl implements UserService {
         logger.info("Initiating logic for getUserById "+userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.NOT_FOUND));
         logger.info("complete logic for getUserById "+userId);
-        return entityToDto(user);
+        return this.mapper.map(user,UserDto.class);
     }
 
     @Override
@@ -91,25 +90,16 @@ public class UserServiceImpl implements UserService {
         logger.info("Initiating logic for  getuserByEmail"+email);
         User userByEmail = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(AppConstants.NOT_FOUND));
         logger.info("complete  logic for  getuserByEmail"+email);
-        return entityToDto(userByEmail);
+        return this.mapper.map(userByEmail,UserDto.class);
     }
 
     @Override
     public List<UserDto> searchUser(String keyword) {
         logger.info("Initiating logic for  serarchUser");
         List<User> users = userRepository.findByNameContaining(keyword);
-        List<UserDto> dtoList = users.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
+        List<UserDto> userDtos = users.stream().map((user) -> mapper.map(user, UserDto.class)).collect(Collectors.toList());
         logger.info("complete logic for  serarchUser");
-        return dtoList;
-    }
-
-
-    private UserDto entityToDto(User saveUser) {
-        return mapper.map(saveUser,UserDto.class);
-    }
-
-    private User dtoToEntity(UserDto userDto) {
-        return mapper.map(userDto ,User.class);
+        return userDtos;
     }
 
 }

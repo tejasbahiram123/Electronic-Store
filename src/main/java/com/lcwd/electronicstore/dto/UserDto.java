@@ -27,6 +27,7 @@ public class UserDto {
     private String email;
 
     @NotBlank
+    @Size(min = 8,message = "In password is minimum Eight Characters required  ")
     private String password;
 
     @Size(min = 4,max = 6 ,message = "Invalid gender")
