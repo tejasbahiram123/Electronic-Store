@@ -10,6 +10,9 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -69,10 +72,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUser() {
+    public List<UserDto> getAllUser(Integer pageNumber,Integer pageSize) {
+
+        Pageable pageable = PageRequest.of(pageNumber ,pageSize);
         logger.info("Initiating logic for getAllUser ");
-        List<User> userList = userRepository.findAll();
-        List<UserDto> list_Of_User_Dtos = userList.stream().map((user) -> mapper.map(user, UserDto.class)).collect(Collectors.toList());
+        Page<User> page = userRepository.findAll(pageable);
+
+        List<User> content = page.getContent();
+        List<UserDto> list_Of_User_Dtos = content.stream().map((user) -> mapper.map(user, UserDto.class)).collect(Collectors.toList());
         logger.info("complete logic for getAllUser");
         return list_Of_User_Dtos;
     }

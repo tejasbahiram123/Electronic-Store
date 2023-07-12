@@ -74,9 +74,12 @@ public class UserController {
      * @apiNote This method for getAll user
      */
     @GetMapping
-    public ResponseEntity<List<UserDto>> getAllUser() {
+    public ResponseEntity<List<UserDto>> getAllUser(
+            @RequestParam(value = "pageNumber",defaultValue = "0",required = false)Integer pageNumber,
+            @RequestParam(value = "pageSize",defaultValue = "10",required = false)Integer pageSize
+    ) {
         logger.info("start request for getAllUser");
-        List<UserDto> allUser = userService.getAllUser();
+        List<UserDto> allUser = userService.getAllUser(pageNumber,pageSize);
         logger.info("complete request for getAllUser");
         return new ResponseEntity<List<UserDto>>(allUser, HttpStatus.OK);
 
