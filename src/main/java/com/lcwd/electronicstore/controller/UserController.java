@@ -80,10 +80,10 @@ public class UserController {
      */
     @DeleteMapping("/{userId}")
     public ResponseEntity<ApiResponceMessage> deleteUser(@PathVariable String userId) {
-        logger.info("start request for delete user"+userId);
+        logger.info("start request for delete user{}",userId);
         userService.deleteUser(userId);
         ApiResponceMessage message = ApiResponceMessage.builder().message(AppConstants.DELETED).success(true).status(HttpStatus.OK).build();
-       logger.info("request completed for delete user"+userId);
+       logger.info("request completed for delete user{}",userId);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
