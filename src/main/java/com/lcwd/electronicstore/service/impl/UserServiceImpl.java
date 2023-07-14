@@ -1,9 +1,11 @@
 package com.lcwd.electronicstore.service.impl;
 
 import com.lcwd.electronicstore.constant.AppConstants;
+import com.lcwd.electronicstore.dto.PageableResponce;
 import com.lcwd.electronicstore.dto.UserDto;
 import com.lcwd.electronicstore.entity.User;
 import com.lcwd.electronicstore.exception.ResourceNotFoundException;
+import com.lcwd.electronicstore.helper.Helper;
 import com.lcwd.electronicstore.repository.UserRepository;
 import com.lcwd.electronicstore.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -73,7 +75,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUser(Integer pageNumber,Integer pageSize,String sortBy,String sortDir) {
+    public PageableResponce<UserDto> getAllUser(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
 
         Sort sort =(sortDir.equalsIgnoreCase("desc"))?(Sort.by(sortBy).descending()):(Sort.by(sortBy).ascending()) ;
 
@@ -81,10 +83,9 @@ public class UserServiceImpl implements UserService {
         logger.info("Initiating logic for getAllUser ");
         Page<User> page = userRepository.findAll(pageable);
 
-        List<User> content = page.getContent();
-        List<UserDto> list_Of_User_Dtos = content.stream().map((user) -> mapper.map(user, UserDto.class)).collect(Collectors.toList());
         logger.info("complete logic for getAllUser");
-        return list_Of_User_Dtos;
+        PageableResponce<UserDto> responce = Helper.getPageableResponce(page, UserDto.class);
+        return responce;
     }
 
     @Override
