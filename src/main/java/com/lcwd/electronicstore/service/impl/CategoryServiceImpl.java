@@ -38,20 +38,20 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto updateCategory(CategoryDto categoryDto, String categoryId) {
-        Category category = this.categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category not found"));
-       category.setTitle(categoryDto.getTitle());
-       category.setDescription(categoryDto.getDescription());
-       category.setCoverImage(categoryDto.getCoverImage());
+        Category category = this.categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category not found with this Id"));
+        category.setTitle(categoryDto.getTitle());
+        category.setDescription(categoryDto.getDescription());
+        category.setCoverImage(categoryDto.getCoverImage());
         Category updated_category = this.categoryRepo.save(category);
-        return this.mapper.map(updated_category,CategoryDto.class);
+        return this.mapper.map(updated_category, CategoryDto.class);
 
     }
 
     @Override
     public PageableResponce<CategoryDto> getAllCategory(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
 
-        Sort sort= (sortDir.equalsIgnoreCase("desc"))?(Sort.by(sortBy).descending()):(Sort.by(sortBy).ascending());
-        PageRequest pageable = PageRequest.of(pageNumber, pageSize,sort);
+        Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
+        PageRequest pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Category> page = this.categoryRepo.findAll(pageable);
         PageableResponce<CategoryDto> pageableResponce = Helper.getPageableResponce(page, CategoryDto.class);
 
@@ -60,14 +60,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto getCategory(String categoryId) {
-        Category category = this.categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category not found.."));
-        return this.mapper.map(category,CategoryDto.class);
+        Category category = this.categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category not found with this Id.."));
+        return this.mapper.map(category, CategoryDto.class);
     }
 
     @Override
     public void deleteCategory(String categoryId) {
 
-        Category category = this.categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category not found"));
-    this.categoryRepo.delete(category);
+        Category category = this.categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category not found with this Id"));
+        this.categoryRepo.delete(category);
     }
 }
