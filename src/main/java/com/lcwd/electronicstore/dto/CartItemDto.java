@@ -10,7 +10,6 @@ import lombok.*;
 public class CartItemDto {
 
     private Integer cartItemId;
-
     private ProductDto productDto;
     private Integer quantity;
     private Integer totalPrice;

@@ -19,7 +19,6 @@ public class Cart {
     @Id
     private String cartId;
     private Date cratedAt;
-
     @OneToOne
     private User user;
 
