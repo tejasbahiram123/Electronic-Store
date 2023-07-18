@@ -1,5 +1,6 @@
 package com.lcwd.electronicstore.dto;
 
+import com.lcwd.electronicstore.entity.Category;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -26,4 +27,6 @@ public class ProductDto {
     private Date addedDate;
     private boolean live;
     private boolean stock;
+    private String productImageName;
+    private CategoryDto category;
 }
