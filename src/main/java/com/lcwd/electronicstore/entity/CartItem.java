@@ -1,9 +1,14 @@
 package com.lcwd.electronicstore.entity;
 
-import net.bytebuddy.dynamic.loading.InjectionClassLoader;
+
+import lombok.*;
 
 import javax.persistence.*;
-
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "cart_items")
 public class CartItem {
@@ -13,8 +18,13 @@ public class CartItem {
     private Integer cartItemId;
 
     @OneToOne
+    @JoinColumn(name = "product_id")
     private Product product;
     private Integer quantity;
     private Integer totalPrice;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
 }
