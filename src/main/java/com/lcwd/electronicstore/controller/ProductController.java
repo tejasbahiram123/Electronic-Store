@@ -1,5 +1,6 @@
 package com.lcwd.electronicstore.controller;
 
+import com.lcwd.electronicstore.constant.AppConstants;
 import com.lcwd.electronicstore.dto.*;
 import com.lcwd.electronicstore.service.FileService;
 import com.lcwd.electronicstore.service.ProductService;
@@ -74,7 +75,7 @@ public class ProductController {
     public ResponseEntity<ApiResponceMessage> deleteProduct(@PathVariable String productId) {
         productService.deleteProduct(productId);
         logger.info("start request for delete Product{} ,"+productId);
-        ApiResponceMessage responce = ApiResponceMessage.builder().message("Product Deleted successful")
+        ApiResponceMessage responce = ApiResponceMessage.builder().message(AppConstants.PRODUCT_DELETED)
                 .status(HttpStatus.OK)
                 .success(true).build();
         logger.info("start request for delete Product{} ,"+productId);
@@ -115,7 +116,7 @@ public class ProductController {
         productDto.setProductImageName(fileName);
         ProductDto updatedProduct = productService.updateProduct(productDto, productId);
 
-        ImageResponce responce = ImageResponce.builder().imageName(updatedProduct.getProductImageName()).message("product image is successful").status(HttpStatus.OK).success(true).build();
+        ImageResponce responce = ImageResponce.builder().imageName(updatedProduct.getProductImageName()).message(AppConstants.PRODUCT_IMAGE).status(HttpStatus.OK).success(true).build();
     logger.info("complete request for upload Image of Product{} ,"+productId);
         return new ResponseEntity<>(responce,HttpStatus.CREATED);
 

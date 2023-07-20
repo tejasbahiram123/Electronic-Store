@@ -1,5 +1,6 @@
 package com.lcwd.electronicstore.controller;
 
+import com.lcwd.electronicstore.constant.AppConstants;
 import com.lcwd.electronicstore.dto.ApiResponceMessage;
 import com.lcwd.electronicstore.dto.CategoryDto;
 import com.lcwd.electronicstore.dto.PageableResponce;
@@ -60,7 +61,7 @@ public class CategoryController {
     public ResponseEntity<ApiResponceMessage> deleteCategory(@PathVariable String categoryId) {
         logger.info("start request for delete Category {},"+categoryId);
         categoryService.deleteCategory(categoryId);
-        ApiResponceMessage responceMessage = ApiResponceMessage.builder().message("category deleted Successfully").success(true).status(HttpStatus.OK).build();
+        ApiResponceMessage responceMessage = ApiResponceMessage.builder().message(AppConstants.CATEGORY_DELETED).success(true).status(HttpStatus.OK).build();
         logger.info("complete request for delete Category {},"+categoryId);
         return new ResponseEntity<>(responceMessage, HttpStatus.OK);
     }
