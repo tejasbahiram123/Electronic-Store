@@ -67,9 +67,9 @@ public class UserController {
     @PutMapping("/{userId}")
     public ResponseEntity<UserDto> updateUser(@Valid @PathVariable String userId
             , @RequestBody UserDto userDto) {
-        logger.info("start request for update user"+userId);
+        logger.info("start request for update user{},"+userId);
         UserDto updateUser = userService.updateUser(userDto, userId);
-        logger.info("complete request for update user"+userId);
+        logger.info("complete request for update user{},"+userId);
         return new ResponseEntity<>(updateUser, HttpStatus.OK);
     }
 
@@ -112,9 +112,9 @@ public class UserController {
      */
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUserById(@PathVariable String userId) {
-        logger.info("start request for get User by Id is"+userId);
+        logger.info("start request for get User by Id is{},"+userId);
         UserDto userById = userService.getUserById(userId);
-        logger.info("complete request for getUser by Id"+userId);
+        logger.info("complete request for getUser by Id{},"+userId);
         return new ResponseEntity<>(userById, HttpStatus.OK);
 
     }
@@ -126,9 +126,9 @@ public class UserController {
      */
     @GetMapping("/email/{email}")
     public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email) {
-        logger.info("start request for getUser by email" + email);
+        logger.info("start request for getUser by email {}," + email);
         UserDto userByEmail = userService.getUserByEmail(email);
-        logger.info("complete request for getUser by email" + email);
+        logger.info("complete request for getUser by email {}," + email);
         return new ResponseEntity<>(userByEmail, HttpStatus.OK);
     }
     /**
@@ -162,7 +162,6 @@ public class UserController {
 
         UserDto userDto = userService.getUserById(userId);
         logger.info("User image name {}", userDto.getImageName());
-
         InputStream resource = fileService.getResource(imageUploadPath, userDto.getImageName());
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
         StreamUtils.copy(resource,response.getOutputStream());
