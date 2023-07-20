@@ -1,4 +1,5 @@
 package com.lcwd.electronicstore.dto;
+import com.lcwd.electronicstore.validate.ImageNameValid;
 import lombok.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -33,6 +34,6 @@ public class UserDto {
     @NotBlank(message = "Write Something in about..")
     private String about;
 
-    @NotBlank(message = "image name not given")
+    @ImageNameValid
     private String imageName;
 }
