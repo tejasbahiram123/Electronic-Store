@@ -21,6 +21,12 @@ public class GlobalExceptionHandler {
     private Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     //resource not found Handler
+
+    /**
+     * @apiNote This method for Handle Resource not found exception
+     * @param ex
+     * @return Message of exception
+     */
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponceMessage> resourceNotFoundExceptionHandler(ResourceNotFoundException ex) {
 
@@ -31,6 +37,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(responce, HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * @apiNote This method for handle Method methodArgumentNotValid exception
+     * @param ex
+     * @return
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
       log.info("Method_Argument_Not_Valid_Exception handler invoked");
@@ -45,6 +56,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(responce, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * @apiNote This method for handle BadApiRequest exception
+     * @param ex
+     * @return message
+     */
     @ExceptionHandler(BadApiRequestException.class)
     public ResponseEntity<ApiResponceMessage> handleBadApiRequest(BadApiRequestException ex) {
 

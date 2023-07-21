@@ -35,6 +35,11 @@ public class ProductController {
 
     private Logger logger= LoggerFactory.getLogger(ProductController.class);
 
+    /**
+     * @apiNote This method for create the product
+     * @param productDto
+     * @return created product
+     */
     @PostMapping
     public ResponseEntity<ProductDto> createProduct(@Valid @RequestBody ProductDto productDto) {
         logger.info("start request for create Product");
@@ -43,6 +48,12 @@ public class ProductController {
         return new ResponseEntity<>(product, HttpStatus.CREATED);
     }
 
+    /**
+     * @apiNote This method for update product
+     * @param productDto
+     * @param productId
+     * @return updated product
+     */
     @PutMapping("/{productId}")
     public ResponseEntity<ProductDto> updateProduct(@Valid @RequestBody ProductDto productDto, @PathVariable String productId) {
         logger.info("start request for update Product{} ,"+productId);
@@ -51,14 +62,27 @@ public class ProductController {
         return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }
 
+    /**
+     * @apiNote This method for get product by Id
+     * @param productId
+     * @return product by Id
+     */
     @GetMapping("/{productId}")
     public ResponseEntity<ProductDto> getProduct(@PathVariable String productId) {
         logger.info("start request for get Product{} ,"+productId);
-        ProductDto updatedProduct = productService.getProduct(productId);
+        ProductDto getProduct = productService.getProduct(productId);
         logger.info("complete request for get Product{} ,"+productId);
-        return new ResponseEntity<>(updatedProduct, HttpStatus.FOUND);
+        return new ResponseEntity<>(getProduct, HttpStatus.FOUND);
     }
 
+    /**
+     * @apiNote This method for getAll product in List
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return List of product
+     */
     @GetMapping
     public ResponseEntity<PageableResponce<ProductDto>> getAllProduct(
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
@@ -71,6 +95,11 @@ public class ProductController {
         return new ResponseEntity<>(allProductS, HttpStatus.FOUND);
     }
 
+    /**
+     * @apiNote This method for delete product by Id
+     * @param productId
+     * @return deleted product message
+     */
     @DeleteMapping("/{productId}")
     public ResponseEntity<ApiResponceMessage> deleteProduct(@PathVariable String productId) {
         productService.deleteProduct(productId);
@@ -81,6 +110,15 @@ public class ProductController {
         logger.info("start request for delete Product{} ,"+productId);
         return new ResponseEntity<ApiResponceMessage>(responce, HttpStatus.OK);
     }
+
+    /**
+     * @apiNote This method getAll live product in list
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return list of live products
+     */
     @GetMapping("/live")
     public ResponseEntity<PageableResponce<ProductDto>> getAllLiveProduct(
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
@@ -93,6 +131,15 @@ public class ProductController {
         return new ResponseEntity<>(allProductS, HttpStatus.FOUND);
     }
 
+    /**
+     * @apiNote This method for search product
+     * @param query
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return Product
+     */
     @GetMapping("/search/{query}")
     public ResponseEntity<PageableResponce<ProductDto>> searchProduct(@PathVariable String query,
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
@@ -105,8 +152,14 @@ public class ProductController {
         return new ResponseEntity<>(allProductS, HttpStatus.FOUND);
     }
 
-    //image upload
-@PostMapping("/image/{productId}")
+    /**
+     * @apiNote This method for Upload image of Product
+     * @param image
+     * @param productId
+     * @return Message
+     * @throws IOException
+     */
+    @PostMapping("/image/{productId}")
     public ResponseEntity<ImageResponce> uploadProductImage(@RequestParam("productImage")MultipartFile image,
                                                             @PathVariable String productId
                                                             ) throws IOException {
@@ -122,6 +175,13 @@ public class ProductController {
 
     }
     //serve image
+
+    /**
+     * @apiNote This method for serve the product Image
+     * @param productId
+     * @param response
+     * @throws IOException
+     */
     @GetMapping("/image/{productId}")
     public void serveProductImage(@PathVariable String productId , HttpServletResponse response) throws IOException {
         logger.info("start request for serve Image of Product{} ,"+productId);

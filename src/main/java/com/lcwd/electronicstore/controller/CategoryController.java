@@ -27,7 +27,11 @@ public class CategoryController {
     private ProductService productService;
 
     private Logger logger= LoggerFactory.getLogger(CategoryController.class);
-    //create
+    /**
+     * @apiNote This method for create Category
+     * @param categoryDto
+     * @return created category
+     */
     @PostMapping("/create")
     public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto) {
         logger.info("start request for create Category {} ");
@@ -36,6 +40,12 @@ public class CategoryController {
         return new ResponseEntity<>(category, HttpStatus.CREATED);
     }
 
+    /**
+     * @apiNote This method for update Category by Id
+     * @param categoryId
+     * @param categoryDto
+     * @return updated category
+     */
     @PutMapping("/update/{categoryId}")
     public ResponseEntity<CategoryDto> updateCategory(@Valid @PathVariable String categoryId, @RequestBody CategoryDto categoryDto) {
         logger.info("start request for update Category {},"+categoryId);
@@ -44,6 +54,14 @@ public class CategoryController {
         return new ResponseEntity<>(updatedCategory, HttpStatus.CREATED);
     }
 
+    /**
+     * @apiNote This method for get all category
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return list of category
+     */
     @GetMapping
     public ResponseEntity<PageableResponce<CategoryDto>> getAllCategory(
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
@@ -57,6 +75,11 @@ public class CategoryController {
         return new ResponseEntity<PageableResponce<CategoryDto>>(allCategory, HttpStatus.FOUND);
     }
 
+    /**
+     * @apiNote This method for delete Category by provided Id
+     * @param categoryId
+     * @return message
+     */
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<ApiResponceMessage> deleteCategory(@PathVariable String categoryId) {
         logger.info("start request for delete Category {},"+categoryId);
@@ -66,6 +89,11 @@ public class CategoryController {
         return new ResponseEntity<>(responceMessage, HttpStatus.OK);
     }
 
+    /**
+     * @apiNote This method for get Category By provided Id
+     * @param categoryId
+     * @return category
+     */
     @GetMapping("/{categoryId}")
     public ResponseEntity<CategoryDto> getCategory(@PathVariable String categoryId) {
         logger.info("start request for get Category {},"+categoryId);
@@ -75,7 +103,13 @@ public class CategoryController {
 
     }
 
-    //create product with category
+
+    /**
+     * @apiNote This method create product with category
+     * @param productDto
+     * @param categoryId
+     * @return
+     */
     @PostMapping("/{categoryId}/products")
     public ResponseEntity<ProductDto> createProductWithCategory(@RequestBody ProductDto productDto,
                                                                 @PathVariable("categoryId") String categoryId) {
@@ -85,7 +119,12 @@ public class CategoryController {
         return new ResponseEntity<>(productWithCategory, HttpStatus.CREATED);
     }
 
-    //update category of product
+    /**
+     * @apiNote This method for update category of product
+     * @param productId
+     * @param categoryId
+     * @return updated category of product
+     */
     @PutMapping("/{categoryId}/products/{productId}")
     public ResponseEntity<ProductDto> updateCategoryOfProduct(@RequestBody
                                                               @PathVariable String productId,
@@ -98,6 +137,16 @@ public class CategoryController {
     }
 
     //get products by categories
+
+    /**
+     * @apiNote This method for get products by category
+     * @param categoryId
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return category of products
+     */
     @GetMapping("/{categoryId}/products")
     public ResponseEntity<PageableResponce<ProductDto>> getProductsByCategory(
             @PathVariable String categoryId,
