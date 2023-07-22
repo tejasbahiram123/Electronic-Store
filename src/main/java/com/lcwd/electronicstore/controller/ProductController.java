@@ -151,7 +151,6 @@ public class ProductController {
         logger.info("start request for update Product{}");
         return new ResponseEntity<>(allProductS, HttpStatus.FOUND);
     }
-
     /**
      * @apiNote This method for Upload image of Product
      * @param image
@@ -174,7 +173,6 @@ public class ProductController {
         return new ResponseEntity<>(responce,HttpStatus.CREATED);
 
     }
-    //serve image
 
     /**
      * @apiNote This method for serve the product Image
