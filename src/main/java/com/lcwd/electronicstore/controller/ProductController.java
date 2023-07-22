@@ -34,7 +34,6 @@ public class ProductController {
     private  String imagePath;
 
     private Logger logger= LoggerFactory.getLogger(ProductController.class);
-
     /**
      * @apiNote This method for create the product
      * @param productDto
