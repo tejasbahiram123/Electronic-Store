@@ -31,25 +31,25 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto createCategory(CategoryDto categoryDto) {
-        logger.info("Initiating logic for create Category {} ");
+        logger.info("Initiating logic for create Category ");
         String randomId = UUID.randomUUID().toString();
         categoryDto.setCategoryId(randomId);
         Category category = this.mapper.map(categoryDto, Category.class);
         Category newCategory = this.categoryRepo.save(category);
-        logger.info("complete logic for create Category {} ");
+        logger.info("complete logic for create Category");
         return this.mapper.map(newCategory, CategoryDto.class);
 
     }
 
     @Override
     public CategoryDto updateCategory(CategoryDto categoryDto, String categoryId) {
-        logger.info("Initiating logic for update Category {} ,"+categoryId);
+        logger.info("Initiating logic for update Category {} ",categoryId);
         Category category = this.categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND));
         category.setTitle(categoryDto.getTitle());
         category.setDescription(categoryDto.getDescription());
         category.setCoverImage(categoryDto.getCoverImage());
         Category updated_category = this.categoryRepo.save(category);
-        logger.info("complete logic for update Category {} ,"+categoryId);
+        logger.info("complete logic for update Category {}",categoryId);
         return this.mapper.map(updated_category, CategoryDto.class);
 
     }
@@ -57,11 +57,11 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public PageableResponce<CategoryDto> getAllCategory(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
 
-        logger.info("Initiating logic for getAll Category {} ,");
+        logger.info("Initiating logic for getAll Category");
         Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
         PageRequest pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Category> page = this.categoryRepo.findAll(pageable);
-        logger.info("complete logic for getAll Category {} ,");
+        logger.info("complete logic for getAll Category ");
         PageableResponce<CategoryDto> pageableResponce = Helper.getPageableResponce(page, CategoryDto.class);
 
         return pageableResponce;
@@ -69,18 +69,18 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto getCategory(String categoryId) {
-        logger.info("Initiating logic for get Category {} ,"+categoryId);
+        logger.info("Initiating logic for get Category {}",categoryId);
         Category category = this.categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND));
-        logger.info("complete logic for get Category {} ,"+categoryId);
+        logger.info("complete logic for get Category {}",categoryId);
         return this.mapper.map(category, CategoryDto.class);
     }
 
     @Override
     public void deleteCategory(String categoryId) {
 
-        logger.info("Initiating logic for delete Category {} ,"+categoryId);
+        logger.info("Initiating logic for delete Category {}",categoryId);
         Category category = this.categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND));
-        logger.info("complete logic for delete Category {} ,"+categoryId);
+        logger.info("complete logic for delete Category {}",categoryId);
         this.categoryRepo.delete(category);
     }
 }

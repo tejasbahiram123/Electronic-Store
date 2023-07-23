@@ -129,7 +129,8 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> searchUser(String keyword) {
         logger.info("Initiating logic for  serarchUser");
         List<User> users = userRepository.findByNameContaining(keyword);
-        List<UserDto> userDtos = users.stream().map((user) -> mapper.map(user, UserDto.class)).collect(Collectors.toList());
+       List<UserDto> userDtos = users.stream().map((user) -> mapper.map(user, UserDto.class))
+                .collect(Collectors.toList());
         logger.info("complete logic for  serarchUser");
         return userDtos;
     }
