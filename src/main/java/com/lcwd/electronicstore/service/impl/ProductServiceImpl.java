@@ -1,5 +1,6 @@
 package com.lcwd.electronicstore.service.impl;
 
+import com.lcwd.electronicstore.constant.AppConstants;
 import com.lcwd.electronicstore.dto.PageableResponce;
 import com.lcwd.electronicstore.dto.ProductDto;
 import com.lcwd.electronicstore.entity.Category;
@@ -54,7 +55,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto updateProduct(ProductDto productDto, String productId) {
         logger.info("Initiating logic for update Product {} ,"+productId);
-        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product Not found with this Id"));
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.PRODUCT_NOT_FOUND));
         product.setTitle(productDto.getTitle());
         product.setDescription(productDto.getDescription());
         product.setPrice(productDto.getPrice());
@@ -73,7 +74,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(String productId) {
         logger.info("Initiating logic for delete Product {} ,"+productId);
-        Product product = this.productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product Not found with this Id"));
+        Product product = this.productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.PRODUCT_NOT_FOUND));
         productRepository.delete(product);
         logger.info("complete logic for delete Product {} ,"+productId);
 
@@ -82,7 +83,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto getProduct(String productId) {
         logger.info("Initiating logic for get Product {} ,"+productId);
-        Product product = this.productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product Not found with this Id"));
+        Product product = this.productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.PRODUCT_NOT_FOUND));
         ProductDto productDto = this.mapper.map(product, ProductDto.class);
         logger.info("complete logic for get Product {} ,"+productId);
         return productDto;
@@ -115,7 +116,7 @@ public class ProductServiceImpl implements ProductService {
         Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Product> products = productRepository.findByTitleContaining(subTitle, pageable);
-        logger.info("Initiating logic for search Product {} ");
+        logger.info("Complete logic for search Product {} ");
         return Helper.getPageableResponce(products, ProductDto.class);
     }
 
@@ -123,7 +124,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto createWithCategory(ProductDto productDto, String categoryId) {
         logger.info("Initiating logic for create product With Category, {} "+categoryId);
        //fetch first category id
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category not found with this Id"));
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND));
         Product product = this.mapper.map(productDto, Product.class);
         //set product Id
         String productId = UUID.randomUUID().toString();
@@ -141,8 +142,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto updateCategory(String productId, String categoryId) {
         logger.info("Initiating logic for  Category, {} "+categoryId);
-        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product not found with this Id"));
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category not found with thiis Id"));
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.PRODUCT_NOT_FOUND));
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND));
 product.setCategory(category);
         Product updatedProduct = productRepository.save(product);
         logger.info("complete logic for Category, {} "+categoryId);
@@ -152,11 +153,11 @@ product.setCategory(category);
     @Override
     public PageableResponce<ProductDto> getAllOfCategory(String categoryId,Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
         logger.info("Initiating logic getAll Category, {} "+categoryId);
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found with this Id"));
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND));
        Sort sort=(sortDir.equalsIgnoreCase("desc")) ?(Sort.by(sortBy).descending()):(Sort.by(sortBy).ascending()) ;
         Pageable pageable=PageRequest.of(pageNumber,pageSize,sort);
         Page<Product> page = productRepository.findByCategory(category,pageable);
-        logger.info("Initiating logic for getAll Category, {} "+categoryId);
+        logger.info("Complete logic for getAll Category, {} "+categoryId);
         return Helper.getPageableResponce(page,ProductDto.class);
     }
 

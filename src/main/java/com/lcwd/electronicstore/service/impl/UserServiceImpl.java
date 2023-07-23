@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(UserDto userDto, String userId) {
         logger.info("Initiating logic for update user{},"+userId);
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.NOT_FOUND));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
         user.setName(userDto.getName());
         user.setPassword(userDto.getPassword());
         user.setGender(userDto.getGender());
@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserById(String userId) {
         logger.info("Initiating logic for getUserById{}, "+userId);
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.NOT_FOUND));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
         logger.info("complete logic for getUserById {},"+userId);
         return this.mapper.map(user,UserDto.class);
     }
@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserByEmail(String email) {
         logger.info("Initiating logic for  getuserByEmail{},"+email);
-        User userByEmail = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(AppConstants.NOT_FOUND));
+        User userByEmail = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
         logger.info("complete  logic for  getuserByEmail {},"+email);
         return this.mapper.map(userByEmail,UserDto.class);
     }

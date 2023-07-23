@@ -1,5 +1,6 @@
 package com.lcwd.electronicstore.service.impl;
 
+import com.lcwd.electronicstore.constant.AppConstants;
 import com.lcwd.electronicstore.dto.CategoryDto;
 import com.lcwd.electronicstore.dto.PageableResponce;
 import com.lcwd.electronicstore.entity.Category;
@@ -43,7 +44,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto updateCategory(CategoryDto categoryDto, String categoryId) {
         logger.info("Initiating logic for update Category {} ,"+categoryId);
-        Category category = this.categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category not found with this Id"));
+        Category category = this.categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND));
         category.setTitle(categoryDto.getTitle());
         category.setDescription(categoryDto.getDescription());
         category.setCoverImage(categoryDto.getCoverImage());
@@ -69,7 +70,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto getCategory(String categoryId) {
         logger.info("Initiating logic for get Category {} ,"+categoryId);
-        Category category = this.categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category not found with this Id.."));
+        Category category = this.categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND));
         logger.info("complete logic for get Category {} ,"+categoryId);
         return this.mapper.map(category, CategoryDto.class);
     }
@@ -78,7 +79,7 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteCategory(String categoryId) {
 
         logger.info("Initiating logic for delete Category {} ,"+categoryId);
-        Category category = this.categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category not found with this Id"));
+        Category category = this.categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND));
         logger.info("complete logic for delete Category {} ,"+categoryId);
         this.categoryRepo.delete(category);
     }

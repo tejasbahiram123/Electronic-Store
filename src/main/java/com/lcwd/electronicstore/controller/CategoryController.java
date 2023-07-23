@@ -34,7 +34,7 @@ public class CategoryController {
      */
     @PostMapping("/create")
     public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto) {
-        logger.info("start request for create Category {} ");
+        logger.info("start request for create Category");
         CategoryDto category = categoryService.createCategory(categoryDto);
         logger.info("complete request for create Category");
         return new ResponseEntity<>(category, HttpStatus.CREATED);
@@ -48,9 +48,9 @@ public class CategoryController {
      */
     @PutMapping("/update/{categoryId}")
     public ResponseEntity<CategoryDto> updateCategory(@Valid @PathVariable String categoryId, @RequestBody CategoryDto categoryDto) {
-        logger.info("start request for update Category {},"+categoryId);
+        logger.info("start request for update Category {}",categoryId);
         CategoryDto updatedCategory = categoryService.updateCategory(categoryDto, categoryId);
-        logger.info("complete request for update Category {},"+categoryId);
+        logger.info("complete request for update Category {}",categoryId);
         return new ResponseEntity<>(updatedCategory, HttpStatus.CREATED);
     }
 
