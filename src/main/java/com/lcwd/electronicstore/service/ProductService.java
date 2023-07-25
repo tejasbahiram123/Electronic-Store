@@ -3,7 +3,6 @@ package com.lcwd.electronicstore.service;
 import com.lcwd.electronicstore.dto.PageableResponce;
 import com.lcwd.electronicstore.dto.ProductDto;
 
-import java.util.List;
 
 public interface ProductService {
 

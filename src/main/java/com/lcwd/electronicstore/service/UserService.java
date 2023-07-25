@@ -28,7 +28,7 @@ public interface UserService {
 
     //search user
     List<UserDto> searchUser(String keyword);
-    //other user specific feture
+
 
 
 }

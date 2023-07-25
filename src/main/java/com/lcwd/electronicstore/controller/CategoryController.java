@@ -41,6 +41,7 @@ public class CategoryController {
     }
 
     /**
+     * @auther Tejas Bahiram
      * @apiNote This method for update Category by Id
      * @param categoryId
      * @param categoryDto
