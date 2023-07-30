@@ -101,11 +101,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public PageableResponce<ProductDto> getAllLive(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
-        logger.info("Initiating logic for update Product ");
+        logger.info("Initiating logic for getAll live Product ");
         Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Product> products = productRepository.findByLiveTrue(pageable);
-        logger.info("complete logic for update Product");
+        logger.info("complete logic for getAll live Product");
         return Helper.getPageableResponce(products, ProductDto.class);
 
     }
