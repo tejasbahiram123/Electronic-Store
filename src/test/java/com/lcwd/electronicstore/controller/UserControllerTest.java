@@ -108,7 +108,45 @@ public class UserControllerTest {
                     .accept(MediaType.APPLICATION_JSON)
     ).andDo(print())
             .andExpect(status().isOk());
-
-
     }
+
+    @Test
+    public void deleteUserTest() throws Exception {
+
+        String userId="123";
+        UserDto dto = mapper.map(user, UserDto.class);
+
+        Mockito.when(userService.getUserById(userId)).thenReturn(dto);
+        userService.deleteUser(userId);
+
+
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/users/"+userId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(convertObjectToJsonString(user))
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getUserByIdTest() throws Exception {
+        String userId="123";
+        UserDto dto = mapper.map(user, UserDto.class);
+
+        Mockito.when(userService.getUserById(userId)).thenReturn(dto);
+        userService.deleteUser(userId);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/users/"+userId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(convertObjectToJsonString(user))
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+
+
+
 }
