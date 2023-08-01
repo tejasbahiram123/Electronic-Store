@@ -2,8 +2,10 @@ package com.lcwd.electronicstore.service;
 
 import com.lcwd.electronicstore.dto.PageableResponce;
 import com.lcwd.electronicstore.dto.ProductDto;
+import com.lcwd.electronicstore.entity.Category;
 import com.lcwd.electronicstore.entity.Product;
 import com.lcwd.electronicstore.helper.Helper;
+import com.lcwd.electronicstore.repository.CategoryRepository;
 import com.lcwd.electronicstore.repository.ProductRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,13 +32,23 @@ public class ProductServiceTest {
     private ProductService productService;
     @Autowired
     private ModelMapper mapper;
+    @MockBean
+    private CategoryRepository categoryRepository;
+    @Autowired
+    private CategoryService categoryService;
 
     Product product;
+
+  Category category;
+
 
     @BeforeEach
     public void init() {
         product = Product.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile1")
                 .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
+
+
+
     }
 
     @Test
@@ -112,5 +124,50 @@ public class ProductServiceTest {
         Assertions.assertEquals(3,allLive.getContent().size());
         Assertions.assertNotNull(allLive);
     }
+//    @Test
+//    public  void searchByTitleTest() {
+//        Product product1 = Product.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile")
+//                .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
+//
+//        Product product2 = Product.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile2")
+//                .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
+//
+//        String keywoard ="m";
+//        List<Product> products = Arrays.asList(product, product1, product2);
+//        Page<Product> page= new PageImpl<>(products);
+//
+//        Mockito.when(productRepository.findByTitleContaining(keywoard,pageable)).thenReturn(page);
+//        PageableResponce<ProductDto> responce = productService.searchByTitle(keywoard, 0, 3, "title", "asc");
+//
+//       // Assertions.assertEquals(3,responce.getContent().size());
+//        Assertions.assertNotNull(responce);
+//
+//    }
+
+//    @Test
+//    public  void getAllCategoryTest(){
+//        Product product11 = Product.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile")
+//                .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
+//
+//        Product product22 = Product.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile")
+//                .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
+//
+//        List<Product> listProducts = Arrays.asList(product, product11, product22);
+//
+//        category = Category.builder().title("music").description("best quality sound bar system")
+//                .coverImage("abc.png").products(listProducts).build();
+//
+//
+//
+//        String catId="cate123";
+//        Page<Product> page=new PageImpl<>(listProducts);
+//
+//        Mockito.when(productRepository.findById(catId)).Mockito.any()).thenReturn();
+//
+//        PageableResponce<ProductDto> allOfCategory = productService.getAllOfCategory(catId, 0, 2, "title", "asc");
+//
+//
+//    }
+
 
 }

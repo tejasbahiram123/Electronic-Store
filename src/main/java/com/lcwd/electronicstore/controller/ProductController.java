@@ -88,9 +88,9 @@ public class ProductController {
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
             @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
-        logger.info("start request for update Product ");
+        logger.info("start request for getAll Product ");
         PageableResponce<ProductDto> allProductS = productService.getAllProduct(pageNumber, pageSize, sortBy, sortDir);
-        logger.info("complete request for update Product ");
+        logger.info("complete request for getAll Product");
         return new ResponseEntity<>(allProductS, HttpStatus.FOUND);
     }
 
@@ -124,9 +124,9 @@ public class ProductController {
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
             @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
-        logger.info("start request for update Product  ");
+        logger.info("start request for getAllLive Product");
         PageableResponce<ProductDto> allProductS = productService.getAllLive(pageNumber, pageSize, sortBy, sortDir);
-        logger.info("complete request for update Product ");
+        logger.info("complete request for  getAllLive Product");
         return new ResponseEntity<>(allProductS, HttpStatus.FOUND);
     }
 
@@ -145,9 +145,9 @@ public class ProductController {
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
             @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
-        logger.info("start request for update Product");
+        logger.info("start request for search Product");
         PageableResponce<ProductDto> allProductS = productService.searchByTitle(query, pageNumber, pageSize, sortBy, sortDir);
-        logger.info("complete request for update Product");
+        logger.info("complete request for search Product");
         return new ResponseEntity<>(allProductS, HttpStatus.FOUND);
     }
     /**

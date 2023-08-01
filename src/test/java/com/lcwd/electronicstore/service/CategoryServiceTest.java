@@ -2,13 +2,9 @@ package com.lcwd.electronicstore.service;
 
 import com.lcwd.electronicstore.dto.CategoryDto;
 import com.lcwd.electronicstore.dto.PageableResponce;
-import com.lcwd.electronicstore.dto.UserDto;
 import com.lcwd.electronicstore.entity.Category;
-import com.lcwd.electronicstore.entity.User;
 import com.lcwd.electronicstore.repository.CategoryRepository;
-
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
