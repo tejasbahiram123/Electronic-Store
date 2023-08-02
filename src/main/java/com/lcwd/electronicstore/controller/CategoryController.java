@@ -65,10 +65,10 @@ public class CategoryController {
      */
     @GetMapping
     public ResponseEntity<PageableResponce<CategoryDto>> getAllCategory(
-            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
-            @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "ase", required = false) String sortDir
+            @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY_TITLE, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue =AppConstants.SORT_DIR, required = false) String sortDir
     ) {
         logger.info("start request for getAll Category");
         PageableResponce<CategoryDto> allCategory = categoryService.getAllCategory(pageNumber, pageSize, sortBy, sortDir);
@@ -151,10 +151,10 @@ public class CategoryController {
     @GetMapping("/{categoryId}/products")
     public ResponseEntity<PageableResponce<ProductDto>> getProductsByCategory(
             @PathVariable String categoryId,
-            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
-            @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "ase", required = false) String sortDir
+            @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY_TITLE, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir
     ) {
         logger.info("start request for get products by Category {}",categoryId);
         PageableResponce<ProductDto> responce = productService.getAllOfCategory(categoryId,pageNumber,pageSize,sortBy,sortDir);

@@ -16,4 +16,6 @@ public class AppConstants {
     public static final String SORT_BY_NAME="name";
     public static final String SORT_DIR="asc";
 
+    public static final String SORT_BY_TITLE="title";
+
 }
