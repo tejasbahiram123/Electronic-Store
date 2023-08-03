@@ -59,7 +59,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.name").exists());
     }
     @Test
-    public void updateUser() throws Exception {
+    public void updateUserTest() throws Exception {
 
         String userId ="user123";
         UserDto dto = mapper.map(user, UserDto.class);
