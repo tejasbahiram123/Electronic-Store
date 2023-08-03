@@ -137,8 +137,6 @@ public class CategoryController {
 
     }
 
-    //get products by categories
-
     /**
      * @apiNote This method for get products by category
      * @param categoryId
