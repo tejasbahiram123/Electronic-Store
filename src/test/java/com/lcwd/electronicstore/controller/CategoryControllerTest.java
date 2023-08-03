@@ -106,6 +106,22 @@ public class CategoryControllerTest {
                 .andExpect(status().isFound());
     }
 
+    @Test
+    public void deleteCategoryTest() throws Exception {
+
+        String catId="2512";
+        CategoryDto dto = mapper.map(category, CategoryDto.class);
+
+        Mockito.when(categoryService.getCategory(catId)).thenReturn(dto);
+        categoryService.deleteCategory(catId);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/categories/"+catId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(convertObjectToJsonString(category))
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 
 
 }
