@@ -2,6 +2,7 @@ package com.lcwd.electronicstore.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lcwd.electronicstore.dto.CategoryDto;
+import com.lcwd.electronicstore.dto.PageableResponce;
 import com.lcwd.electronicstore.entity.Category;
 import com.lcwd.electronicstore.service.CategoryService;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.Arrays;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -79,7 +82,28 @@ public class CategoryControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
                // .andExpect(jsonPath("$.title").exists());
+    }
+    @Test
+    public void getAllCategoryTest() throws Exception {
 
+        CategoryDto dto = CategoryDto.builder().title("Tvs").description("all categories of electronics appliences ").coverImage("abc.png").build();
+        CategoryDto dto2 = CategoryDto.builder().title("Music system").description("all categories of electronics appliences ").coverImage("abc.png").build();
+        CategoryDto dto3 = CategoryDto.builder().title("AC").description("all categories of electronics appliences ").coverImage("abc.png").build();
+        CategoryDto dto4 = CategoryDto.builder().title("Smartphones").description("all categories of electronics appliences ").coverImage("abc.png").build();
+
+        PageableResponce<CategoryDto> pageableResponce=new PageableResponce<>();
+        pageableResponce.setContent(Arrays.asList(dto,dto2,dto3,dto4));
+        pageableResponce.setPageNumber(0);
+        pageableResponce.setPageSize(2);
+        pageableResponce.setLastPage(false);
+        pageableResponce.setTotalElements(4);
+
+        Mockito.when(categoryService.getAllCategory(Mockito.anyInt(),Mockito.anyInt(),Mockito.anyString(),Mockito.anyString())).thenReturn(pageableResponce);
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/categories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isFound());
     }
 
 

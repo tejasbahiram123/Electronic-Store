@@ -33,9 +33,10 @@ public class UserControllerTest {
     private ModelMapper mapper;
     @Autowired
     private MockMvc mockMvc;
-    private  User user;
+    private User user;
+
     @BeforeEach
-    public  void init(){
+    public void init() {
         user = User.builder()
                 .name("tejas")
                 .email("tejas12@gmail.com")
@@ -44,32 +45,34 @@ public class UserControllerTest {
                 .imageName("abc.png").
                 password("tyfyt5554").build();
     }
+
     @Test
-    public  void createUserTest() throws Exception {
+    public void createUserTest() throws Exception {
 
         UserDto dto = mapper.map(user, UserDto.class);
         Mockito.when(userService.createUser(Mockito.any())).thenReturn(dto);
 
         this.mockMvc.perform(MockMvcRequestBuilders.post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjectToJsonString(user))
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(convertObjectToJsonString(user))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").exists());
     }
+
     @Test
     public void updateUserTest() throws Exception {
 
-        String userId ="user123";
+        String userId = "user123";
         UserDto dto = mapper.map(user, UserDto.class);
-        Mockito.when(userService.updateUser(Mockito.any(),Mockito.anyString())).thenReturn(dto);
+        Mockito.when(userService.updateUser(Mockito.any(), Mockito.anyString())).thenReturn(dto);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.put("/users/"+userId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjectToJsonString(user))
-                .accept(MediaType.APPLICATION_JSON)
-        )
+        this.mockMvc.perform(MockMvcRequestBuilders.put("/users/" + userId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(convertObjectToJsonString(user))
+                        .accept(MediaType.APPLICATION_JSON)
+                )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").exists());
@@ -77,9 +80,9 @@ public class UserControllerTest {
     }
 
     private String convertObjectToJsonString(Object user) {
-        try{
-    return new ObjectMapper().writeValueAsString(user);
-        }catch (Exception e){
+        try {
+            return new ObjectMapper().writeValueAsString(user);
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -93,34 +96,34 @@ public class UserControllerTest {
         UserDto object3 = UserDto.builder().name("sumit").email("tejas12@gmail.com").password("tejas2512").about("Testing").build();
         UserDto object4 = UserDto.builder().name("elvish").email("tejas12@gmail.com").password("tejas2512").about("Testing").build();
 
-        PageableResponce<UserDto> pageableResponce= new PageableResponce<>();
-        pageableResponce.setContent(Arrays.asList(object1,object2,object3,object4));
+        PageableResponce<UserDto> pageableResponce = new PageableResponce<>();
+        pageableResponce.setContent(Arrays.asList(object1, object2, object3, object4));
         pageableResponce.setPageNumber(10);
         pageableResponce.setLastPage(false);
         pageableResponce.setPageSize(100);
         pageableResponce.setTotalElements(1000);
 
-        Mockito.when(userService.getAllUser(Mockito.anyInt(),Mockito.anyInt(),Mockito.anyString()
-                                            ,Mockito.anyString())).thenReturn(pageableResponce);
-    this.mockMvc.perform(
-            MockMvcRequestBuilders.get("/users")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON)
-    ).andDo(print())
-            .andExpect(status().isOk());
+        Mockito.when(userService.getAllUser(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString()
+                , Mockito.anyString())).thenReturn(pageableResponce);
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get("/users")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isOk());
     }
 
     @Test
     public void deleteUserTest() throws Exception {
 
-        String userId="123";
+        String userId = "123";
         UserDto dto = mapper.map(user, UserDto.class);
 
         Mockito.when(userService.getUserById(userId)).thenReturn(dto);
         userService.deleteUser(userId);
 
 
-        this.mockMvc.perform(MockMvcRequestBuilders.delete("/users/"+userId)
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/users/" + userId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(convertObjectToJsonString(user))
                         .accept(MediaType.APPLICATION_JSON)
@@ -131,13 +134,13 @@ public class UserControllerTest {
 
     @Test
     public void getUserByIdTest() throws Exception {
-        String userId="123";
+        String userId = "123";
         UserDto dto = mapper.map(user, UserDto.class);
 
         Mockito.when(userService.getUserById(userId)).thenReturn(dto);
         userService.deleteUser(userId);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/users/"+userId)
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/users/" + userId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(convertObjectToJsonString(user))
                         .accept(MediaType.APPLICATION_JSON)
@@ -145,15 +148,16 @@ public class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
+
     @Test
     public void getUserByEmailTest() throws Exception {
-        String email="123";
+        String email = "123";
         UserDto dto = mapper.map(user, UserDto.class);
 
         Mockito.when(userService.getUserByEmail(email)).thenReturn(dto);
         userService.deleteUser(email);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/users/email/"+email)
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/users/email/" + email)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(convertObjectToJsonString(user))
                         .accept(MediaType.APPLICATION_JSON)
@@ -162,8 +166,6 @@ public class UserControllerTest {
                 .andExpect(status().isOk());
 
     }
-
-
 
 
 }
