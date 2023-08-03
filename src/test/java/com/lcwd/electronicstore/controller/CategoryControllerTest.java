@@ -38,7 +38,7 @@ public class CategoryControllerTest {
     @BeforeEach
     public void init() {
         category = Category.builder()
-                .title("LG store")
+                .title("LG store ")
                 .coverImage("abc.png")
                 .description("best products of Tvs here")
                 .build();
@@ -66,4 +66,22 @@ public class CategoryControllerTest {
             return null;
         }
     }
+    @Test
+    public  void updateCategoryTest() throws Exception {
+        String categoryId="cat123";
+        CategoryDto dto = mapper.map(category, CategoryDto.class);
+
+        Mockito.when(categoryService.updateCategory(dto,categoryId)).thenReturn(dto);
+        mockMvc.perform(MockMvcRequestBuilders.put("/categories/update/"+categoryId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(convertObjectToJsonString(category))
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated());
+               // .andExpect(jsonPath("$.title").exists());
+
+    }
+
+
+
 }
