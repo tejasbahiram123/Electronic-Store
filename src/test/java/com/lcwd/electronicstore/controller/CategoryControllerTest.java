@@ -21,6 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -157,11 +159,11 @@ public class CategoryControllerTest {
 
         this.mockMvc.perform(MockMvcRequestBuilders.post("/categories/catId/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjectToJsonString(category))
-                .contentType(MediaType.APPLICATION_JSON))
+                .content(convertObjectToJsonString(product))
+                .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated());
-               // .andExpect(jsonPath("$.title").exists());
+               //.andExpect(jsonPath("$.title").exists());
     }
     @Test
     public void updateCategoryOfProductTest() throws Exception {
@@ -179,5 +181,52 @@ public class CategoryControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void getProductsByCategoryTest() throws Exception {
+        CategoryDto categoryDto = mapper.map(category, CategoryDto.class);
+
+        ProductDto productDto1 = ProductDto.builder().productId(UUID.randomUUID().toString()).live(true)
+                .price(252.00)
+                .discountedPrice(250.00)
+                .stock(true)
+                .title("mobile1")
+                .description("all types of mobiles")
+                .productImageName("abc.png")
+                .quantity(100).build();
+        ProductDto productDto2 = ProductDto.builder().productId(UUID.randomUUID().toString()).live(true)
+                .price(252.00)
+                .discountedPrice(250.00)
+                .stock(true)
+                .title("mobile1")
+                .description("all types of mobiles")
+                .productImageName("abc.png")
+                .quantity(100).build();
+
+//        String catId="cat123";
+//
+//        Product product1 = Product.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile1")
+//                .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
+//        Product product2 = Product.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile1")
+//                .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
+//        List<Product> products = Arrays.asList(product, product1, product2);
+//       ProductDto dto = mapper.map(products, ProductDto.class);
+
+        PageableResponce<ProductDto> pageableResponce=new PageableResponce<>();
+        pageableResponce.setContent(Arrays.asList(productDto1,productDto2));
+        pageableResponce.setPageNumber(0);
+        pageableResponce.setPageSize(2);
+        pageableResponce.setLastPage(false);
+        pageableResponce.setTotalPages(10);
+        pageableResponce.setTotalElements(3);
+
+        Mockito.when(productService.getAllOfCategory(Mockito.anyString(),Mockito.anyInt(),Mockito.anyInt(),Mockito.anyString(),Mockito.anyString())).thenReturn(pageableResponce);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/categories/"+categoryDto.getCategoryId()+"/products")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
 
 }
