@@ -151,7 +151,6 @@ public class CategoryControllerTest {
 
     @Test
     public void createProductWithCategoryTest() throws Exception {
-
         String catId="cat123";
         ProductDto dto = mapper.map(product, ProductDto.class);
         Mockito.when(productService.createWithCategory(dto,catId)).thenReturn(dto);
@@ -162,6 +161,23 @@ public class CategoryControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated());
-               // .andExpect(jsonPath("$.LG store ").exists());
+               // .andExpect(jsonPath("$.title").exists());
     }
+    @Test
+    public void updateCategoryOfProductTest() throws Exception {
+        String catId="cat123";
+        String proId="pro123";
+
+        ProductDto dto = mapper.map(product, ProductDto.class);
+        Mockito.when(productService.updateCategory(proId,catId)).thenReturn(dto);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.put("/categories/catId/products/proId")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(convertObjectToJsonString(category))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+
 }
