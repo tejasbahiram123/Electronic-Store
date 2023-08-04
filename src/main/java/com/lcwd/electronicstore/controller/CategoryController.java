@@ -126,6 +126,7 @@ public class CategoryController {
      * @param categoryId
      * @return updated category of product
      */
+
     @PutMapping("/{categoryId}/products/{productId}")
     public ResponseEntity<ProductDto> updateCategoryOfProduct(@RequestBody
                                                               @PathVariable String productId,

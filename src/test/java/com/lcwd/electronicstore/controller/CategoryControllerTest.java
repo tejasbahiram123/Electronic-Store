@@ -3,8 +3,11 @@ package com.lcwd.electronicstore.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lcwd.electronicstore.dto.CategoryDto;
 import com.lcwd.electronicstore.dto.PageableResponce;
+import com.lcwd.electronicstore.dto.ProductDto;
 import com.lcwd.electronicstore.entity.Category;
+import com.lcwd.electronicstore.entity.Product;
 import com.lcwd.electronicstore.service.CategoryService;
+import com.lcwd.electronicstore.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -37,6 +40,10 @@ public class CategoryControllerTest {
 
     private Category category;
 
+    @MockBean
+    private ProductService productService;
+
+    Product product;
 
     @BeforeEach
     public void init() {
@@ -45,6 +52,10 @@ public class CategoryControllerTest {
                 .coverImage("abc.png")
                 .description("best products of Tvs here")
                 .build();
+
+        product = Product.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile1")
+                .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
+
     }
     @Test
     public void createCategoryTest() throws Exception {
@@ -138,4 +149,19 @@ public class CategoryControllerTest {
                 .andExpect(status().isFound());
     }
 
+    @Test
+    public void createProductWithCategoryTest() throws Exception {
+
+        String catId="cat123";
+        ProductDto dto = mapper.map(product, ProductDto.class);
+        Mockito.when(productService.createWithCategory(dto,catId)).thenReturn(dto);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/categories/catId/products")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(convertObjectToJsonString(category))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated());
+               // .andExpect(jsonPath("$.LG store ").exists());
+    }
 }
