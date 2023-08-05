@@ -1,6 +1,7 @@
 package com.lcwd.electronicstore.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lcwd.electronicstore.dto.PageableResponce;
 import com.lcwd.electronicstore.dto.ProductDto;
 import com.lcwd.electronicstore.entity.Product;
 import com.lcwd.electronicstore.service.ProductService;
@@ -15,6 +16,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.Arrays;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -92,6 +95,31 @@ public class ProductControllerTest {
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(jsonPath("$.title").exists());
+    }
+
+    @Test
+    public void getAllProductTest() throws Exception {
+        ProductDto productDto = ProductDto.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile1")
+                .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
+        ProductDto productDto1 = ProductDto.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile1")
+                .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
+        ProductDto productDto2 = ProductDto.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile1")
+                .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
+
+        PageableResponce<ProductDto> pageableResponce=new PageableResponce<>();
+        pageableResponce.setContent(Arrays.asList(productDto,productDto1,productDto2));
+        pageableResponce.setPageNumber(1);
+        pageableResponce.setPageSize(2);
+        pageableResponce.setLastPage(false);
+        pageableResponce.setTotalElements(4);
+
+   Mockito.when(productService.getAllProduct(1,10,"title","asc")).thenReturn(pageableResponce);
+   this.mockMvc.perform(MockMvcRequestBuilders.get("/products")
+           .contentType(MediaType.APPLICATION_JSON)
+           .accept(MediaType.APPLICATION_JSON))
+           .andDo(print())
+           .andExpect(status().isFound());
+
     }
 
 
