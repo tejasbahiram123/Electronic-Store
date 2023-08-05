@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ProductControllerTest {
 
     @MockBean
-     private ProductService productService;
+    private ProductService productService;
 
     @Autowired
     private ModelMapper mapper;
@@ -37,23 +37,25 @@ public class ProductControllerTest {
     private MockMvc mockMvc;
 
     Product product;
+
     @BeforeEach
-    public void init(){
+    public void init() {
 
         product = Product.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile1")
                 .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
 
 
     }
+
     @Test
-    public  void createProductTest() throws Exception {
+    public void createProductTest() throws Exception {
         ProductDto dto = mapper.map(product, ProductDto.class);
         Mockito.when(productService.createProduct(Mockito.any())).thenReturn(dto);
 
         this.mockMvc.perform(MockMvcRequestBuilders.post("/products")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjectToJsonString(product))
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(convertObjectToJsonString(product))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.title").exists());
@@ -61,9 +63,9 @@ public class ProductControllerTest {
     }
 
     private String convertObjectToJsonString(Object product) {
-        try{
-            return  new ObjectMapper().writeValueAsString(product);
-        }catch (Exception e){
+        try {
+            return new ObjectMapper().writeValueAsString(product);
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -71,20 +73,21 @@ public class ProductControllerTest {
 
     @Test
     public void updateProductTest() throws Exception {
-        String proId="pro123";
+        String proId = "pro123";
         ProductDto productDto = mapper.map(product, ProductDto.class);
-        Mockito.when(productService.updateProduct(Mockito.any(),Mockito.anyString())).thenReturn(productDto);
+        Mockito.when(productService.updateProduct(Mockito.any(), Mockito.anyString())).thenReturn(productDto);
         this.mockMvc.perform(MockMvcRequestBuilders.put("/products/proId")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjectToJsonString(product))
-                .accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(convertObjectToJsonString(product))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").exists());
     }
+
     @Test
     public void getProductTest() throws Exception {
-        String proId="pro123";
+        String proId = "pro123";
         ProductDto productDto = mapper.map(product, ProductDto.class);
 
         Mockito.when(productService.getProduct(Mockito.anyString())).thenReturn(productDto);
@@ -106,21 +109,38 @@ public class ProductControllerTest {
         ProductDto productDto2 = ProductDto.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile1")
                 .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
 
-        PageableResponce<ProductDto> pageableResponce=new PageableResponce<>();
-        pageableResponce.setContent(Arrays.asList(productDto,productDto1,productDto2));
+        PageableResponce<ProductDto> pageableResponce = new PageableResponce<>();
+        pageableResponce.setContent(Arrays.asList(productDto, productDto1, productDto2));
         pageableResponce.setPageNumber(1);
         pageableResponce.setPageSize(2);
         pageableResponce.setLastPage(false);
         pageableResponce.setTotalElements(4);
 
-   Mockito.when(productService.getAllProduct(1,10,"title","asc")).thenReturn(pageableResponce);
-   this.mockMvc.perform(MockMvcRequestBuilders.get("/products")
-           .contentType(MediaType.APPLICATION_JSON)
-           .accept(MediaType.APPLICATION_JSON))
-           .andDo(print())
-           .andExpect(status().isFound());
+        Mockito.when(productService.getAllProduct(1, 10, "title", "asc")).thenReturn(pageableResponce);
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isFound());
 
     }
 
+    @Test
+    public void deleteProductTest() throws Exception {
+        String proId = "pro123";
+        ProductDto productDto = mapper.map(product, ProductDto.class);
+
+        Mockito.when(productService.getProduct(Mockito.anyString())).thenReturn(productDto);
+        productService.deleteProduct(proId);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/products/proId")
+                        .contentType(MediaType.APPLICATION_JSON))
+                //  .content(convertObjectToJsonString(product)))
+                //  .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+
+    }
 
 }
