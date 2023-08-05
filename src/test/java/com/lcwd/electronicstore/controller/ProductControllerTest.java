@@ -78,6 +78,21 @@ public class ProductControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").exists());
-
     }
+    @Test
+    public void getProductTest() throws Exception {
+        String proId="pro123";
+        ProductDto productDto = mapper.map(product, ProductDto.class);
+
+        Mockito.when(productService.getProduct(Mockito.anyString())).thenReturn(productDto);
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/products/proId")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(convertObjectToJsonString(product))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(jsonPath("$.title").exists());
+    }
+
+
 }
