@@ -173,6 +173,32 @@ public class ProductControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isFound());
-
     }
+
+    @Test
+    public void searchProductTest() throws Exception {
+        String query="mobile";
+        ProductDto productDto = ProductDto.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile1")
+                .description("all types of mobile").productImageName("abc.png").quantity(100).build();
+        ProductDto productDto1 = ProductDto.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile1")
+                .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
+        ProductDto productDto2 = ProductDto.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile1")
+                .description("all types of mobil").productImageName("abc.png").quantity(100).build();
+
+        PageableResponce<ProductDto> pageableResponce = new PageableResponce<>();
+        pageableResponce.setContent(Arrays.asList(productDto, productDto1, productDto2));
+        pageableResponce.setPageNumber(1);
+        pageableResponce.setPageSize(2);
+        pageableResponce.setLastPage(false);
+        pageableResponce.setTotalElements(4);
+
+        Mockito.when(productService.searchByTitle(query,1,2,"title","acs")).thenReturn(pageableResponce);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/products/search/"+query)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isFound());
+    }
+
 }
