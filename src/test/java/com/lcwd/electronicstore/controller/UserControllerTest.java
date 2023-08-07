@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -167,5 +169,23 @@ public class UserControllerTest {
 
     }
 
+    @Test
+    public void searchUserTest() throws Exception {
+        String keyword="tej";
+        UserDto dto = UserDto.builder().userId(UUID.randomUUID().toString()).about("cfgfxgfx")
+                .name("tejas").email("tejas12@gmail.com").password("s@1225555").build();
+        UserDto dto1 = UserDto.builder().userId(UUID.randomUUID().toString()).about("cfgfxgfx")
+                .name("tejas").email("tejas12@gmail.com").password("s@1225555").build();
+
+        List<UserDto> userDtos = Arrays.asList(dto1, dto);
+
+        Mockito.when(userService.searchUser(Mockito.anyString())).thenReturn(userDtos);
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/users/search"+keyword)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
 
 }

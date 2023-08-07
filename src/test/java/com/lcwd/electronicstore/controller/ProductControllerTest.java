@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lcwd.electronicstore.dto.PageableResponce;
 import com.lcwd.electronicstore.dto.ProductDto;
 import com.lcwd.electronicstore.entity.Product;
+import com.lcwd.electronicstore.service.FileService;
 import com.lcwd.electronicstore.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -29,6 +31,9 @@ public class ProductControllerTest {
 
     @MockBean
     private ProductService productService;
+
+    @MockBean
+    private FileService fileService;
 
     @Autowired
     private ModelMapper mapper;
@@ -199,6 +204,20 @@ public class ProductControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isFound());
+    }
+    @Test
+    public void uploadProductImage() throws Exception {
+
+        String proId="123";
+        String imgname="abc.png";
+
+        Mockito.when(fileService.uplodFile(Mockito.any(),Mockito.anyString())).thenReturn(imgname);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/products/image"+proId)
+                .contentType(MediaType.IMAGE_PNG)
+                .accept(MediaType.IMAGE_PNG))
+                .andDo(print())
+                .andExpect(status().isCreated());
     }
 
 }
