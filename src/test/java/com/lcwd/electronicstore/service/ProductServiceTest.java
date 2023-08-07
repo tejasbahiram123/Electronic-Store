@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -40,14 +41,13 @@ public class ProductServiceTest {
 
     Product product;
 
-  Category category;
+    Category category;
 
 
     @BeforeEach
     public void init() {
         product = Product.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile1")
                 .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
-
 
 
     }
@@ -102,15 +102,16 @@ public class ProductServiceTest {
                 .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
 
         List<Product> productsList = Arrays.asList(product, product1, product2);
-        Page<Product> page= new PageImpl<>(productsList);
+        Page<Product> page = new PageImpl<>(productsList);
         Mockito.when(productRepository.findAll((Pageable) Mockito.any())).thenReturn(page);
 
         PageableResponce<ProductDto> allProduct = productService.getAllProduct(1, 2, "title", "asc");
-        Assertions.assertEquals(3,allProduct.getContent().size());
+        Assertions.assertEquals(3, allProduct.getContent().size());
         Assertions.assertNotNull(allProduct);
     }
+
     @Test
-    public  void getAllLiveTest(){
+    public void getAllLiveTest() {
         Product product1 = Product.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile")
                 .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
 
@@ -118,16 +119,17 @@ public class ProductServiceTest {
                 .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
 
         List<Product> productsList = Arrays.asList(product, product1, product2);
-        Page<Product> page= new PageImpl<>(productsList);
-        Mockito.when(productRepository.findByLiveTrue((Pageable)Mockito.any())).thenReturn(page);
+        Page<Product> page = new PageImpl<>(productsList);
+        Mockito.when(productRepository.findByLiveTrue((Pageable) Mockito.any())).thenReturn(page);
         PageableResponce<ProductDto> allLive = productService.getAllLive(0, 3, "title", "asc");
 
-        Assertions.assertEquals(3,allLive.getContent().size());
+        Assertions.assertEquals(3, allLive.getContent().size());
         Assertions.assertNotNull(allLive);
     }
+
     @Test
-    public  void searchByTitleTest() {
-        String subtitle="mobi";
+    public void searchByTitleTest() {
+        String subtitle = "mobi";
         Product product1 = Product.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile")
                 .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
 
@@ -136,21 +138,21 @@ public class ProductServiceTest {
 
         List<Product> products = Arrays.asList(product1, product2);
         ProductDto dto = mapper.map(products, ProductDto.class);
-        Page<Product> page= new PageImpl<>(products);
-        Mockito.when(productRepository.findByTitleContaining(Mockito.any(),Mockito.any())).thenReturn(page);
+        Page<Product> page = new PageImpl<>(products);
+        Mockito.when(productRepository.findByTitleContaining(Mockito.any(), Mockito.any())).thenReturn(page);
         PageableResponce<ProductDto> responce = productService.searchByTitle(subtitle, 0, 3, "title", "asc");
-       Assertions.assertEquals(2,responce.getContent().size());
+        Assertions.assertEquals(2, responce.getContent().size());
         Assertions.assertNotNull(responce);
 
     }
 
     @Test
-    public  void getAllCategoryTest(){
+    public void getAllCategoryTest() {
 
         Category category = Category.builder().title("music").description("best quality sound bar system")
                 .coverImage("abc.png").build();
 
-        String catId="cate123";
+        String catId = "cate123";
         Mockito.when(categoryRepository.findById(Mockito.any())).thenReturn(Optional.of(category));
         CategoryDto category1 = categoryService.getCategory(catId);
 
@@ -162,13 +164,14 @@ public class ProductServiceTest {
 
         PageImpl<Product> products = new PageImpl<>(Arrays.asList(product1, product2));
 
-        Mockito.when(productRepository.findByCategory(Mockito.any(),Mockito.any())).thenReturn(products);
-        PageableResponce<ProductDto> allProduct = productService.getAllOfCategory(catId, 1,1,"title", "asc");
+        Mockito.when(productRepository.findByCategory(Mockito.any(), Mockito.any())).thenReturn(products);
+        PageableResponce<ProductDto> allProduct = productService.getAllOfCategory(catId, 1, 1, "title", "asc");
 
-        Assertions.assertEquals(2,allProduct.getContent().size());
+        Assertions.assertEquals(2, allProduct.getContent().size());
         Assertions.assertNotNull(category1);
 
     }
+
 
 
 }
