@@ -1,5 +1,6 @@
 package com.lcwd.electronicstore.service;
 
+import com.lcwd.electronicstore.dto.CategoryDto;
 import com.lcwd.electronicstore.dto.PageableResponce;
 import com.lcwd.electronicstore.dto.ProductDto;
 import com.lcwd.electronicstore.entity.Category;
@@ -143,30 +144,31 @@ public class ProductServiceTest {
 
     }
 
-//    @Test
-//    public  void getAllCategoryTest(){
-//        Product product11 = Product.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile")
-//                .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
-//
-//        Product product22 = Product.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile")
-//                .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
-//
-//        List<Product> listProducts = Arrays.asList(product, product11, product22);
-//
-//        category = Category.builder().title("music").description("best quality sound bar system")
-//                .coverImage("abc.png").products(listProducts).build();
-//
-//
-//
-//        String catId="cate123";
-//        Page<Product> page=new PageImpl<>(listProducts);
-//
-//        Mockito.when(productRepository.findById(catId)).Mockito.any()).thenReturn();
-//
-//        PageableResponce<ProductDto> allOfCategory = productService.getAllOfCategory(catId, 0, 2, "title", "asc");
-//
-//
-//    }
+    @Test
+    public  void getAllCategoryTest(){
+
+        Category category = Category.builder().title("music").description("best quality sound bar system")
+                .coverImage("abc.png").build();
+
+        String catId="cate123";
+        Mockito.when(categoryRepository.findById(Mockito.any())).thenReturn(Optional.of(category));
+        CategoryDto category1 = categoryService.getCategory(catId);
+
+        Product product1 = Product.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile")
+                .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
+
+        Product product2 = Product.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile")
+                .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
+
+        PageImpl<Product> products = new PageImpl<>(Arrays.asList(product1, product2));
+
+        Mockito.when(productRepository.findByCategory(Mockito.any(),Mockito.any())).thenReturn(products);
+        PageableResponce<ProductDto> allProduct = productService.getAllOfCategory(catId, 1,1,"title", "asc");
+
+        Assertions.assertEquals(2,allProduct.getContent().size());
+        Assertions.assertNotNull(category1);
+
+    }
 
 
 }
