@@ -214,8 +214,8 @@ public class ProductControllerTest {
         Mockito.when(fileService.uplodFile(Mockito.any(),Mockito.anyString())).thenReturn(imgname);
 
         this.mockMvc.perform(MockMvcRequestBuilders.post("/products/image"+proId)
-                .contentType(MediaType.IMAGE_PNG)
-                .accept(MediaType.IMAGE_PNG))
+                .contentType(MediaType.IMAGE_PNG_VALUE)
+                .accept(MediaType.IMAGE_PNG_VALUE))
                 .andDo(print())
                 .andExpect(status().isCreated());
     }

@@ -124,25 +124,24 @@ public class ProductServiceTest {
         Assertions.assertEquals(3,allLive.getContent().size());
         Assertions.assertNotNull(allLive);
     }
-//    @Test
-//    public  void searchByTitleTest() {
-//        String subtitle="hello";
-//        ProductDto product1 = ProductDto.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile")
-//                .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
-//
-//        ProductDto product2 = ProductDto.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile2")
-//                .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
-//
-//        String keywoard ="m";
-//        List<ProductDto> productDtos = Arrays.asList(product1, product2);
-//        Page<ProductDto> page= new PageImpl<>(productDtos);
-//        Mockito.when(productRepository.findByTitleContaining(subtitle,Mockito.any())).thenReturn(page);
-//        PageableResponce<ProductDto> responce = productService.searchByTitle(keywoard, 0, 3, "title", "asc");
-//
-//       // Assertions.assertEquals(3,responce.getContent().size());
-//        Assertions.assertNotNull(responce);
-//
-//    }
+    @Test
+    public  void searchByTitleTest() {
+        String subtitle="mobi";
+        Product product1 = Product.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile")
+                .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
+
+        Product product2 = Product.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile2")
+                .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
+
+        List<Product> products = Arrays.asList(product1, product2);
+        ProductDto dto = mapper.map(products, ProductDto.class);
+        Page<Product> page= new PageImpl<>(products);
+        Mockito.when(productRepository.findByTitleContaining(Mockito.any(),Mockito.any())).thenReturn(page);
+        PageableResponce<ProductDto> responce = productService.searchByTitle(subtitle, 0, 3, "title", "asc");
+       Assertions.assertEquals(2,responce.getContent().size());
+        Assertions.assertNotNull(responce);
+
+    }
 
 //    @Test
 //    public  void getAllCategoryTest(){
