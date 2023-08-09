@@ -172,6 +172,28 @@ public class ProductServiceTest {
 
     }
 
+    @Test
+    public void updateCategoryTest(){
+        String proId="pro123";
+        String catId="cat123";
+
+        Product product = Product.builder().live(true).price(252.00).discountedPrice(250.00).stock(true).title("mobile")
+                .description("all types of mobiles").productImageName("abc.png").quantity(100).build();
+CategoryDto categoryDto= CategoryDto.builder().title("electronics").description("new stock").coverImage("dd.png").build();
+
+        Mockito.when(productRepository.findById(Mockito.any())).thenReturn(Optional.of(product));
+        ProductDto product1 = productService.getProduct(Mockito.anyString());
+
+      //  Mockito.when(categoryRepository.findById(Mockito.any())).thenReturn(categoryDto);
+        product1.setCategory(categoryDto);
+
+       Assertions.assertNotNull(product1);
+      // Assertions.assertEquals(categoryDto.getTitle(),product1.getTitle());
+
+
+
+
+    }
 
 
 }
