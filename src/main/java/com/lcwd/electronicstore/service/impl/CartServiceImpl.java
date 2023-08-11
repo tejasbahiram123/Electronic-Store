@@ -7,7 +7,9 @@ import com.lcwd.electronicstore.entity.Cart;
 import com.lcwd.electronicstore.entity.CartItem;
 import com.lcwd.electronicstore.entity.Product;
 import com.lcwd.electronicstore.entity.User;
+import com.lcwd.electronicstore.exception.BadApiRequestException;
 import com.lcwd.electronicstore.exception.ResourceNotFoundException;
+import com.lcwd.electronicstore.repository.CartItemRepository;
 import com.lcwd.electronicstore.repository.CartRepository;
 import com.lcwd.electronicstore.repository.ProductRepository;
 import com.lcwd.electronicstore.repository.UserRepository;
@@ -34,6 +36,8 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     private CartRepository cartRepository;
+    @Autowired
+    private CartItemRepository cartItemRepository;
 
     @Autowired
     private ModelMapper mapper;
@@ -43,6 +47,10 @@ public class CartServiceImpl implements CartService {
 
         Integer quantity = request.getQuantity();
         String productId = request.getProductId();
+        if(quantity<=0){
+            throw new BadApiRequestException(AppConstants.NOT_VALID);
+        }
+      //fetch product
         Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.PRODUCT_NOT_FOUND));
 
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
@@ -70,8 +78,6 @@ public class CartServiceImpl implements CartService {
         }).collect(Collectors.toList());
 
         cart.setItems(updatedItems);
-
-
      if(!updated.get()){
          CartItem cartItems = CartItem.builder().quantity(quantity).
                  totalPrice(quantity * product.getPrice())
@@ -79,7 +85,6 @@ public class CartServiceImpl implements CartService {
 
          cart.getItems().add(cartItems);
      }
-
         cart.setUser(user);
         Cart updatedCart = cartRepository.save(cart);
 
@@ -90,6 +95,9 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void removeItemFromCart(String userId, Integer cartItem) {
+
+        CartItem cartItem1 = cartItemRepository.findById(cartItem).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CART_ITEM_NOT_FOUND));
+        cartItemRepository.delete(cartItem1);
 
     }
 
