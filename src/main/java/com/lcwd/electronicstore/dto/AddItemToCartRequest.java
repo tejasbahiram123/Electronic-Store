@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class AddItemToCartRequest {
 
-    private Integer productId;
+    private String productId;
 
     private Integer quantity;
 }
