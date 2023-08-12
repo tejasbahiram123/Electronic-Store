@@ -47,25 +47,25 @@ public class CartServiceImpl implements CartService {
 
         Integer quantity = request.getQuantity();
         String productId = request.getProductId();
-        if(quantity<=0){
+        if (quantity <= 0) {
             throw new BadApiRequestException(AppConstants.NOT_VALID);
         }
-      //fetch product
+        //fetch product
         Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.PRODUCT_NOT_FOUND));
 
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
-        Cart cart=null;
+        Cart cart = null;
 
         try {
             cartRepository.findByUser(user).get();
-        }catch (NoSuchElementException e){
-             cart = new Cart();
-             cart.setCartId(UUID.randomUUID().toString());
-             cart.setCratedAt(new Date());
+        } catch (NoSuchElementException e) {
+            cart = new Cart();
+            cart.setCartId(UUID.randomUUID().toString());
+            cart.setCratedAt(new Date());
         }
         //if in cart items already present then update
         //perform cart operation
-        AtomicReference<Boolean> updated =new AtomicReference<>(false);
+        AtomicReference<Boolean> updated = new AtomicReference<>(false);
         List<CartItem> items = cart.getItems();
         List<CartItem> updatedItems = items.stream().map(item -> {
             if (item.getProduct().getProductId().equals(productId)) {
@@ -78,17 +78,17 @@ public class CartServiceImpl implements CartService {
         }).collect(Collectors.toList());
 
         cart.setItems(updatedItems);
-     if(!updated.get()){
-         CartItem cartItems = CartItem.builder().quantity(quantity).
-                 totalPrice(quantity * product.getPrice())
-                 .cart(cart).product(product).build();
+        if (!updated.get()) {
+            CartItem cartItems = CartItem.builder().quantity(quantity).
+                    totalPrice(quantity * product.getPrice())
+                    .cart(cart).product(product).build();
 
-         cart.getItems().add(cartItems);
-     }
+            cart.getItems().add(cartItems);
+        }
         cart.setUser(user);
         Cart updatedCart = cartRepository.save(cart);
 
-        return mapper.map(updatedCart,CartDto.class);
+        return mapper.map(updatedCart, CartDto.class);
 
 
     }
@@ -104,5 +104,9 @@ public class CartServiceImpl implements CartService {
     @Override
     public void clearCart(String userId) {
 
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
+        Cart cart = cartRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CART_NOT_FOUND));
+        cart.getItems().clear();
+        cartRepository.save(cart);
     }
 }

@@ -12,6 +12,7 @@ public class AppConstants {
     public static final String CATEGORY_DELETED="Category deleted Successfully";
 
     public static final String CART_ITEM_NOT_FOUND="Cart item is not found with this Id";
+    public static final String CART_NOT_FOUND="Cart Of given user is not found";
 
     public static final String NOT_VALID="Requested Quantity is not valid";
     public static final String PAGE_NUMBER="0";
