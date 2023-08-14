@@ -57,7 +57,7 @@ public class CartServiceImpl implements CartService {
         Cart cart = null;
 
         try {
-            cartRepository.findByUser(user).get();
+            cart=cartRepository.findByUser(user).get();
         } catch (NoSuchElementException e) {
             cart = new Cart();
             cart.setCartId(UUID.randomUUID().toString());
@@ -70,7 +70,7 @@ public class CartServiceImpl implements CartService {
         List<CartItem> updatedItems = items.stream().map(item -> {
             if (item.getProduct().getProductId().equals(productId)) {
                 item.setQuantity(quantity);
-                item.setTotalPrice(quantity * product.getPrice());
+                item.setTotalPrice(quantity * product.getDiscountedPrice());
                 updated.set(true);
             }
             return item;
@@ -80,7 +80,7 @@ public class CartServiceImpl implements CartService {
         cart.setItems(updatedItems);
         if (!updated.get()) {
             CartItem cartItems = CartItem.builder().quantity(quantity).
-                    totalPrice(quantity * product.getPrice())
+                    totalPrice(quantity * product.getDiscountedPrice())
                     .cart(cart).product(product).build();
 
             cart.getItems().add(cartItems);
