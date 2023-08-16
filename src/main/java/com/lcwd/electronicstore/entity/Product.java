@@ -3,7 +3,10 @@ package com.lcwd.electronicstore.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -17,10 +20,10 @@ public class Product {
     @Column(name = "id")
     private String productId;
 
-    @Column(name = "product_title",nullable = true)
+    @Column(name = "product_title", nullable = true)
     private String title;
 
-    @Column(name = "description",length = 500)
+    @Column(name = "description", length = 500)
     private String description;
 
     @Column(name = "price")
@@ -46,4 +49,6 @@ public class Product {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;
+
 }
+
