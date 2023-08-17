@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @ToString
 public class OrderItemDto {
-    private String orderItemId;
+    private String ItemId;
 
     private Integer quantity;
 
