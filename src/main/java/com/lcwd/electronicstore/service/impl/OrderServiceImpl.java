@@ -1,6 +1,7 @@
 package com.lcwd.electronicstore.service.impl;
 
 import com.lcwd.electronicstore.constant.AppConstants;
+import com.lcwd.electronicstore.dto.CreateOrderRequest;
 import com.lcwd.electronicstore.dto.OrderDto;
 import com.lcwd.electronicstore.dto.PageableResponce;
 import com.lcwd.electronicstore.entity.*;
@@ -14,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.Null;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -35,8 +37,11 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public OrderDto createOrder(OrderDto orderDto, String userId,String cartId) {
-       //fetch user
+    public OrderDto createOrder(CreateOrderRequest orderDto) {
+        String userId = orderDto.getUserId();
+        String cartId = orderDto.getCartId();
+
+        //fetch user
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
        //fetch cart
         Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND));
@@ -51,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
                 .billingAddress(orderDto.getBillingAddress())
                 .billingPhone(orderDto.getBillingPhone())
                 .orderedDate(new Date())
-                .deliveredDate(orderDto.getDeliveredDate())
+                .deliveredDate(null)
                 .orderStatus(orderDto.getOrderStatus())
                 .paymentStatus(orderDto.getPaymentStatus())
                 .orderId(UUID.randomUUID().toString())
