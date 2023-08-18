@@ -7,6 +7,7 @@ import com.lcwd.electronicstore.dto.PageableResponce;
 import com.lcwd.electronicstore.entity.*;
 import com.lcwd.electronicstore.exception.BadApiRequestException;
 import com.lcwd.electronicstore.exception.ResourceNotFoundException;
+import com.lcwd.electronicstore.helper.Helper;
 import com.lcwd.electronicstore.repository.CartRepository;
 import com.lcwd.electronicstore.repository.OrderRepository;
 import com.lcwd.electronicstore.repository.UserRepository;
@@ -14,6 +15,9 @@ import com.lcwd.electronicstore.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Null;
@@ -96,6 +100,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> getOrdersOfUser(String userId) {
+
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
         List<Order> orders = orderRepository.findByUser(user);
         List<OrderDto> orderDtos = orders.stream().map(order -> mapper.map(order, OrderDto.class)).collect(Collectors.toList());
@@ -104,6 +109,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public PageableResponce<OrderDto> getOrders(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
-        return null;
+
+        Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
+        PageRequest pageable = PageRequest.of(pageNumber, pageSize, sort);
+        Page<Order> page = orderRepository.findAll(pageable);
+
+        return Helper.getPageableResponce(page,OrderDto.class);
     }
 }
