@@ -12,15 +12,15 @@ import com.lcwd.electronicstore.repository.CartRepository;
 import com.lcwd.electronicstore.repository.OrderRepository;
 import com.lcwd.electronicstore.repository.UserRepository;
 import com.lcwd.electronicstore.service.OrderService;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.Null;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -38,13 +38,13 @@ public class OrderServiceImpl implements OrderService {
     private CartRepository cartRepository;
     @Autowired
     private ModelMapper mapper;
-
+    private  static Logger logger= LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Override
     public OrderDto createOrder(CreateOrderRequest orderDto) {
         String userId = orderDto.getUserId();
         String cartId = orderDto.getCartId();
-
+        logger.info("Initiating logic for create Order");
         //fetch user
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
         //fetch cart
@@ -88,32 +88,35 @@ public class OrderServiceImpl implements OrderService {
         cart.getItems().clear();
         cartRepository.save(cart);
         Order saveOrder = orderRepository.save(order);
+        logger.info("Complete logic for create Order");
         return mapper.map(saveOrder, OrderDto.class);
     }
 
     @Override
     public void removeOrder(String orderId) {
-
+        logger.info("Initiating logic for remove Order{}",orderId);
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.ORDER_NOT_FOUND));
         orderRepository.delete(order);
+        logger.info("Complete logic for remove Order{}",orderId);
     }
 
     @Override
     public List<OrderDto> getOrdersOfUser(String userId) {
-
+        logger.info("Initiating logic for getOrders Of User{}",userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
         List<Order> orders = orderRepository.findByUser(user);
         List<OrderDto> orderDtos = orders.stream().map(order -> mapper.map(order, OrderDto.class)).collect(Collectors.toList());
+        logger.info("Complete logic for getOrders Of User{}",userId);
         return orderDtos;
     }
 
     @Override
     public PageableResponce<OrderDto> getOrders(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
-
+        logger.info("Initiating logic for getOrders");
         Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
         PageRequest pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Order> page = orderRepository.findAll(pageable);
-
+        logger.info("Complete logic for getOrders");
         return Helper.getPageableResponce(page,OrderDto.class);
     }
 }
