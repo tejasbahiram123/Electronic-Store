@@ -11,6 +11,7 @@ import com.lcwd.electronicstore.repository.CartRepository;
 import com.lcwd.electronicstore.repository.OrderRepository;
 import com.lcwd.electronicstore.repository.UserRepository;
 import com.lcwd.electronicstore.service.OrderService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,6 @@ public class OrderServiceImpl implements OrderService {
     private ModelMapper mapper;
 
 
-
     @Override
     public OrderDto createOrder(CreateOrderRequest orderDto) {
         String userId = orderDto.getUserId();
@@ -43,12 +43,12 @@ public class OrderServiceImpl implements OrderService {
 
         //fetch user
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
-       //fetch cart
+        //fetch cart
         Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND));
 
         List<CartItem> cartItems = cart.getItems();
 
-        if(cartItems.size()<=0){
+        if (cartItems.size() <= 0) {
             throw new BadApiRequestException("Invalid ,No Items is found in cart");
         }
 
@@ -63,7 +63,7 @@ public class OrderServiceImpl implements OrderService {
                 .user(user)
                 .build();
 
-        AtomicReference<Double> orderAmount=new AtomicReference<>(0.0);
+        AtomicReference<Double> orderAmount = new AtomicReference<>(0.0);
         List<OrderItem> orderItems = cartItems.stream().map(cartItem -> {
             OrderItem orderItem = OrderItem.builder().quantity(cartItem.getQuantity())
                     .product(cartItem.getProduct())
@@ -71,8 +71,8 @@ public class OrderServiceImpl implements OrderService {
                     .order(order)
                     .build();
 
-            orderAmount.set(orderAmount.get()+ orderItem.getTotalPrice());
-            return  orderItem;
+            orderAmount.set(orderAmount.get() + orderItem.getTotalPrice());
+            return orderItem;
         }).collect(Collectors.toList());
 
         order.setOrderItems(orderItems);
@@ -82,19 +82,24 @@ public class OrderServiceImpl implements OrderService {
 
         //after clear cart
         cart.getItems().clear();
-       cartRepository.save(cart);
+        cartRepository.save(cart);
         Order saveOrder = orderRepository.save(order);
-        return mapper.map(saveOrder,OrderDto.class);
+        return mapper.map(saveOrder, OrderDto.class);
     }
 
     @Override
     public void removeOrder(String orderId) {
 
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.ORDER_NOT_FOUND));
+        orderRepository.delete(order);
     }
 
     @Override
     public List<OrderDto> getOrdersOfUser(String userId) {
-        return null;
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
+        List<Order> orders = orderRepository.findByUser(user);
+        List<OrderDto> orderDtos = orders.stream().map(order -> mapper.map(order, OrderDto.class)).collect(Collectors.toList());
+        return orderDtos;
     }
 
     @Override
