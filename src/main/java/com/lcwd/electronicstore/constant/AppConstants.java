@@ -17,6 +17,9 @@ public class AppConstants {
     public static final String ITEM_REMOVED="Item removed successfully";
     public static final String CLEAR_CART="cart clear successfully";
     public static final String  ORDER_NOT_FOUND="Order not found";
+
+    public static final String  ORDER_REMOVED="Order removed successful";
+
     public static final String NOT_VALID="Requested Quantity is not valid";
     public static final String PAGE_NUMBER="0";
     public static final String PAGE_SIZE="10";
