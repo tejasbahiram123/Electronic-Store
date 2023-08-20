@@ -56,8 +56,8 @@ public class OrderController {
     public ResponseEntity<PageableResponce<OrderDto>> getOrders(
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
-            @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir)
+            @RequestParam(value = "sortBy", defaultValue = "orderedDate", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "desc", required = false) String sortDir)
     {
         logger.info("Initiating logic for getOrders");
         PageableResponce<OrderDto> orders = orderService.getOrders(pageNumber,pageSize,sortBy,sortDir);

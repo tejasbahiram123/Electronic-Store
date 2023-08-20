@@ -67,7 +67,7 @@ public class CartServiceImpl implements CartService {
         //perform cart operation
         AtomicReference<Boolean> updated = new AtomicReference<>(false);
         List<CartItem> items = cart.getItems();
-        List<CartItem> updatedItems = items.stream().map(item -> {
+        items = items.stream().map(item -> {
             if (item.getProduct().getProductId().equals(productId)) {
                 item.setQuantity(quantity);
                 item.setTotalPrice(quantity * product.getDiscountedPrice());
@@ -77,7 +77,8 @@ public class CartServiceImpl implements CartService {
 
         }).collect(Collectors.toList());
 
-        cart.setItems(updatedItems);
+       // cart.setItems(updatedItems);
+
         if (!updated.get()) {
             CartItem cartItems = CartItem.builder().quantity(quantity).
                     totalPrice(quantity * product.getDiscountedPrice())
